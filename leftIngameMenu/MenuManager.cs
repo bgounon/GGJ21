@@ -1,17 +1,18 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using Object = System.Object;
 
 public class MenuManager : MonoBehaviour
 {
+    public float rotationSpeed = 2f;
     private bool isItemSelection = false;
     private GameObject currentItem = null;
+    private GameObject player;
 
     void Start()
     {
+        player = GameObject.FindGameObjectsWithTag("Player").FirstOrDefault();
     }
 
     private void Update()
@@ -23,6 +24,14 @@ public class MenuManager : MonoBehaviour
         else if (Input.GetMouseButtonDown(0) && !isItemSelection)
         {
             onMouseClickWithoutSelection();
+        }
+        if(Input.GetAxisRaw("Mouse ScrollWheel") > 0 && isItemSelection)
+        {
+            rotateElementToRight();
+        }
+        else if(Input.GetAxisRaw("Mouse ScrollWheel") < 0 && isItemSelection)
+        {
+            rotateElementToLeft();
         }
     }
 
@@ -59,7 +68,7 @@ public class MenuManager : MonoBehaviour
     {
         var mousePosition = Input.mousePosition;
         currentItem = Instantiate(itemToSpawn, mousePosition, Quaternion.identity);
-        isItemSelection = true;
+        setItemSelection(true);
     }
 
     private void changeItemSelection(GameObject newItem)
@@ -72,7 +81,7 @@ public class MenuManager : MonoBehaviour
     {
         DestroyImmediate(currentItem);
         currentItem = null;
-        isItemSelection = false;
+        setItemSelection(false);
     }
 
     private void followCursor()
@@ -92,15 +101,15 @@ public class MenuManager : MonoBehaviour
             var currentItemCollider = currentItem.GetComponent<Collider2D>();
             Collider2D[] otherColliders = Physics2D.OverlapAreaAll(currentItemCollider.bounds.min, currentItemCollider.bounds.max);
 
-            var item = otherColliders.FirstOrDefault(item => item.CompareTag("placedItem"));
+            var item = otherColliders.FirstOrDefault(item => item.CompareTag("Obstacle"));
             if (item)
             {
                 print("Other item under");
             }
             else
             {
-                currentItem.tag = "placedItem";
-                isItemSelection = false;
+                currentItem.tag = "Obstacle";
+                setItemSelection(false);
                 currentItem = null;
             }
         }
@@ -112,12 +121,22 @@ public class MenuManager : MonoBehaviour
         Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
             
         RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
-        if (hit.collider != null && hit.transform.gameObject.CompareTag("placedItem"))
+        if (hit.collider != null && hit.transform.gameObject.CompareTag("Obstacle"))
         {
             currentItem = hit.transform.gameObject;
             currentItem.tag = "Untagged";
-            isItemSelection = true;
+            setItemSelection(true);
         }   
+    }
+
+    private void rotateElementToRight()
+    {
+        currentItem.transform.Rotate(new Vector3(0,0,1) * rotationSpeed, Space.Self);
+    }
+
+    private void rotateElementToLeft()
+    {
+        currentItem.transform.Rotate(new Vector3(0,0,-1) * rotationSpeed, Space.Self);
     }
     
     private static bool IsPointerOverUIObject()
@@ -128,4 +147,24 @@ public class MenuManager : MonoBehaviour
         EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
         return results.Count > 0;
     }
+
+    private void setItemSelection(bool value)
+    {
+        var playerRigidBody = player.GetComponent<Rigidbody2D>();
+        var playerCollider = player.GetComponent<Collider2D>();
+        if (value)
+        {
+            playerCollider.enabled = false;
+            playerRigidBody.isKinematic = true;
+        }
+        else
+        {
+            playerCollider.enabled = true;
+            playerRigidBody.isKinematic = false;
+        }
+
+        isItemSelection = value;
+    }
+    
+    
 }
