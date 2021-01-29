@@ -40,6 +40,9 @@ public class Player : MonoBehaviour
         if (col.gameObject.tag == "Death") {
             GameManager.PlayerTriggerDeath();
         }
+        if (col.gameObject.tag == "Boat") {
+            GameManager.PlayerTriggerBoat(col.gameObject);
+        }
     }
 
     void OnCollisionEnter2D(Collision2D col) {
