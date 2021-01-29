@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.CrashReporting;
 using UnityEngine;
 
-public class move : MonoBehaviour
+public class Player : MonoBehaviour
 {
     public float speed = 2f;
     private bool moving;
@@ -37,14 +37,14 @@ public class move : MonoBehaviour
         if (col.gameObject.tag == "Finish") {
             GameManager.PlayerTriggerFinish();
         }
+        if (col.gameObject.tag == "Death") {
+            GameManager.PlayerTriggerDeath();
+        }
     }
 
     void OnCollisionEnter2D(Collision2D col) {
         if (col.gameObject.tag == "Obstacle") {
             CollisionWithObstacle(col);
-        }
-        if (col.gameObject.tag == "Teleporter") {
-            CollisionWithTeleporter(col);
         }
     }
 
@@ -55,10 +55,6 @@ public class move : MonoBehaviour
         Vector2 newVelocity = Vector2.Reflect(velocity, inNormal);
         print(newVelocity);
         velocity = newVelocity;
-    }
-
-    void CollisionWithTeleporter(Collision2D col){
-
     }
 
 }
