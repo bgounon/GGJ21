@@ -1,44 +1,25 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+using System.Transactions;
 using UnityEditor.CrashReporting;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : Mob
 {
-    public GameObject spawnPoint;
-    public float speed = 2f;
-    private bool moving;
-    private Rigidbody2D rb2d;
-    private Vector2 velocity;
-    private GameManager manager;
     private bool sailing;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-        manager = FindObjectOfType<GameManager>();
-        rb2d = GetComponent<Rigidbody2D>();
-        moving = false;
+        base.Start();
         sailing = false;
     }
 
-    public void startMoving()
-    {
-        moving = true;
-        velocity = transform.right * speed;
-    }
-
-    public void stopMoving()
-    {
-        moving = false;
-        rb2d.velocity = Vector2.zero;
-    }
-
-    public void resetPlayer()
+    public override void reset()
     {
         sailing = false;
-        transform.rotation = Quaternion.identity;
-        transform.position = spawnPoint.transform.position;
+        base.reset();
     }
 
     public void sail() {
@@ -50,12 +31,9 @@ public class Player : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-        if (moving) {
-            rb2d.velocity = velocity;
-        }
-
+        base.Update();
     }
 
     void OnTriggerEnter2D(Collider2D col) {
@@ -78,21 +56,6 @@ public class Player : MonoBehaviour
             manager.PlayerTriggerDrown();
         }
 
-    }
-
-    void OnCollisionEnter2D(Collision2D col) {
-        if (col.gameObject.tag == "Obstacle") {
-            CollisionWithObstacle(col);
-        }
-    }
-
-    void CollisionWithObstacle(Collision2D col){
-        print("Collide with obstacle.");
-
-        Vector2 inNormal = col.contacts[0].normal;
-        Vector2 newVelocity = Vector2.Reflect(velocity, inNormal);
-        print(newVelocity);
-        velocity = newVelocity;
     }
 
 }

@@ -43,7 +43,7 @@ public class GameManager : MonoBehaviour
         {
             player.gameObject.SetActive(true);
             player.stopMoving();
-            player.resetPlayer();
+            player.reset();
             boat.resetBoat();
             updateState(GameState.CONSTRUCTION);
         }
