@@ -155,8 +155,8 @@ public class MenuManager : MonoBehaviour
         var playerCollider = player.GetComponent<Collider2D>();
         if (value)
         {
-            playerCollider.enabled = false;
             playerRigidBody.isKinematic = true;
+            playerCollider.enabled = false;
         }
         else
         {

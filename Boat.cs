@@ -45,6 +45,7 @@ public class Boat : MonoBehaviour
         if (other.tag == "Player")
         {
             player = other.gameObject;
+            player.GetComponent<Player>().sail();
             velocity = other.GetComponent<Rigidbody2D>().velocity;
             player.SetActive(false);
             moving = true;
@@ -60,6 +61,7 @@ public class Boat : MonoBehaviour
             GetComponent<Collider2D>().enabled = false;
             player.transform.position = transform.position;
             player.SetActive(true);
+            player.GetComponent<Player>().stopSail();
         }
     }
     void OnBecameInvisible()

@@ -1,22 +1,35 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 
 public class ScreenFeedback : MonoBehaviour
 {
-    private string displayFormat = "{0}\nScore : {1}";
-    private Text text;
+        private Text textStatus;
+        private Text textScore;
 
     private void Start()
     {
-        text = GetComponent<Text>();
+        var components = GetComponentsInChildren<Text>();
+        textStatus = components.FirstOrDefault(item => item.name == "Status");
+        textScore = components.FirstOrDefault(item => item.name == "Score");
     }
 
-    public void updateDisplay(string step, int score)
+    public void updateDisplay(string step)
     {
-        text.text = string.Format(displayFormat, step, score);
+        if(textStatus != null) {
+            textStatus.text = step;
+        }
+ 
+    }
+    public void updateScore(int score)
+    {
+             if(textScore != null) {
+                    textScore.text = $"Score : {score}";
+        }
+
     }
 }

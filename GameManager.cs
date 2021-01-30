@@ -28,7 +28,8 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             onEnterPressed();
-        }   
+        }
+        screenFeedback.updateScore(currentScore);
     }
 
     private void onEnterPressed()
@@ -53,21 +54,21 @@ public class GameManager : MonoBehaviour
         switch (newState)
         {
             case GameState.RUNNING:
-                screenFeedback.updateDisplay("Running", currentScore);
+                screenFeedback.updateDisplay("Running");
                 panelHider.hideCreationPannel();
                 break;
             case GameState.WIN:
-                screenFeedback.updateDisplay("Win", currentScore);
+                screenFeedback.updateDisplay("Win");
                 player.stopMoving();
                 break;
             case GameState.LOOSE:
                 currentScore = 0;
-                screenFeedback.updateDisplay("Loose", currentScore);
+                screenFeedback.updateDisplay("Loose");
                 player.stopMoving();
                 break;
             case GameState.CONSTRUCTION:
                 currentScore = initialScore;
-                screenFeedback.updateDisplay("Construction", currentScore);
+                screenFeedback.updateDisplay("Construction");
                 panelHider.showCreationPannel();
                 break;
         }
@@ -75,11 +76,22 @@ public class GameManager : MonoBehaviour
         state = newState;
     }
 
-    public static void PlayerTriggerFinish(){
+    public void PlayerTriggerFinish(){
         print("Finished");
+        updateState(GameState.WIN);
     }
-    public static void PlayerTriggerDeath(){
+    public void PlayerTriggerDeath(){
         print("You are dead");
+        updateState(GameState.LOOSE);
+    }
+
+    public void PlayerTriggerDrown(){
+        print("You drowned");
+        updateState(GameState.LOOSE);
+    }
+
+    public void addScore(int value){
+        currentScore += value;
     }
 
 }

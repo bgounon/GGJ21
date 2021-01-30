@@ -10,12 +10,16 @@ public class Player : MonoBehaviour
     private bool moving;
     private Rigidbody2D rb2d;
     private Vector2 velocity;
+    private GameManager manager;
+    private bool sailing;
 
     // Start is called before the first frame update
     void Start()
     {
+        manager = FindObjectOfType<GameManager>();
         rb2d = GetComponent<Rigidbody2D>();
         moving = false;
+        sailing = false;
     }
 
     public void startMoving()
@@ -32,8 +36,17 @@ public class Player : MonoBehaviour
 
     public void resetPlayer()
     {
+        sailing = false;
         transform.rotation = Quaternion.identity;
         transform.position = spawnPoint.transform.position;
+    }
+
+    public void sail() {
+        sailing = true;
+    }
+
+    public void stopSail() {
+        sailing = false;
     }
 
     // Update is called once per frame
@@ -47,10 +60,22 @@ public class Player : MonoBehaviour
 
     void OnTriggerEnter2D(Collider2D col) {
         if (col.gameObject.tag == "Finish") {
-            GameManager.PlayerTriggerFinish();
+            manager.PlayerTriggerFinish();
         }
         if (col.gameObject.tag == "Death") {
-            GameManager.PlayerTriggerDeath();
+            manager.PlayerTriggerDeath();
+        }
+        if (col.gameObject.tag == "Coin") {
+            Coin coin = col.gameObject.GetComponent<Coin>();
+            manager.addScore(coin.value);
+            Destroy(coin.gameObject);
+        }
+
+    }
+
+    void OnTriggerExit2D(Collider2D col) {
+        if (col.gameObject.tag == "Island" && sailing == false && !rb2d.isKinematic) {
+            manager.PlayerTriggerDrown();
         }
 
     }
