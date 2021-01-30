@@ -5,12 +5,12 @@ using UnityEngine.EventSystems;
 
 public class Boat : MonoBehaviour
 {
+    public GameObject spawnPoint;
     public float speed = 2f;
     private bool moving, sailing;
     private Rigidbody2D rb2d;
     private Vector2 velocity;
     private GameObject player;
-
 
     // Start is called before the first frame update
     void Start()
@@ -19,6 +19,15 @@ public class Boat : MonoBehaviour
         velocity = transform.right * speed;
         moving = false;
         sailing = false;
+    }
+
+    public void resetBoat()
+    {
+        transform.position = spawnPoint.transform.position;
+        rb2d.velocity = Vector2.zero;
+        moving = false;
+        sailing = false;
+        GetComponent<Collider2D>().enabled = true;
     }
 
     // Update is called once per frame
