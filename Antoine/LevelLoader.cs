@@ -1,61 +1,121 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
+using UnityEngine.SocialPlatforms.Impl;
+using Debug = UnityEngine.Debug;
 
 public class LevelLoader : MonoBehaviour
 {
     public Animator transition;
     public float transitionTime = 1f;
+    private LevelFinishedSerialization levelFinished;
+    private string serializedFiledName = "levelFinished.lol";
+
+    private void Start()
+    {
+        Debug.Log(Application.persistentDataPath);
+        try
+        {
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new FileStream($"{Application.persistentDataPath}/{serializedFiledName}", FileMode.Open,
+                FileAccess.Read);
+
+            levelFinished = (LevelFinishedSerialization) formatter.Deserialize(stream);
+        }
+        catch (Exception e)
+        {
+            levelFinished = new LevelFinishedSerialization()
+            {
+                levelFinishedList = new LevelFinishedDetails[] { }
+            };
+        }
+        
+        Debug.Log("LOADED");
+
+    }
 
     public void LoadSceneCreditsFonction()
     {
-        StartCoroutine(LoadCredits());
+        StartCoroutine(LoadScene("Credits"));
     }
-    IEnumerator LoadCredits()
+    
+    public void LoadSceneLevelSelectFonction()
     {
-        //play animation
-        transition.SetTrigger("Start");
-        //wait
-        yield return new WaitForSeconds(transitionTime);
-        //load scene
-        SceneManager.LoadScene("Credits");
+        StartCoroutine(LoadScene("LevelSelection"));
     }
-
-    public void LoadSceneGameFonction()
+    
+    public void LoadLevel(string sceneName)
     {
-        StartCoroutine(LoadGame());
-    }
-    IEnumerator LoadGame()
-    {
-        //play animation
-        transition.SetTrigger("Start");
-        //wait
-        yield return new WaitForSeconds(transitionTime);
-        //load scene
-        SceneManager.LoadScene("Game");
+        updateLevelWin(sceneName, 100);
+        StartCoroutine(LoadScene(sceneName));
     }
 
     public void LoadSceneMenuFonction()
     {
-        print("JAI CLIQUE PT1");
-        StartCoroutine(LoadMenu());
+        StartCoroutine(LoadScene("Menu"));
     }
-    IEnumerator LoadMenu()
+
+    IEnumerator LoadScene(string sceneName)
     {
         //play animation
         transition.SetTrigger("Start");
         //wait
         yield return new WaitForSeconds(transitionTime);
         //load scene
-        SceneManager.LoadScene("Menu");
+        SceneManager.LoadScene(sceneName);
     }
 
     public void QuitGame()
     {
         print("quit game!");
         Application.Quit();
+    }
+
+    public void updateLevelWin(string levelName, int score)
+    {
+        LevelFinishedDetails alreadyFinishedLevel =
+            levelFinished.levelFinishedList.FirstOrDefault(item => item.levelName.Equals(levelName));
+        if (alreadyFinishedLevel.levelName == null)
+        {
+            alreadyFinishedLevel.score = score;
+            alreadyFinishedLevel.levelName = levelName;
+            levelFinished.levelFinishedList = levelFinished.levelFinishedList.Append(alreadyFinishedLevel).ToArray();
+        }
+        else
+        {
+            if (score > alreadyFinishedLevel.score)
+            {
+                alreadyFinishedLevel.score = score;
+            }
+        }
+
+        updateSerializedFile();
+
+    }
+
+    private void updateSerializedFile()
+    {
+        try
+        {
+            IFormatter formatter = new BinaryFormatter();
+            Stream stream = new FileStream($"{Application.persistentDataPath}/{serializedFiledName}", FileMode.Create,
+                FileAccess.Write);
+
+            formatter.Serialize(stream, levelFinished);
+        }
+        catch (Exception e)
+        {
+            print("Error impossible to serialize data");
+        }
+    }
+
+    public LevelFinishedSerialization getCurrentLevelInfo()
+    {
+        return levelFinished;
     }
 }
