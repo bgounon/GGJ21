@@ -30,19 +30,29 @@ public class GameManager : MonoBehaviour
 
     public void onEnterPressed()
     {
+        var listOfEnemies = FindObjectsOfType<Patrol>();
         if (state == GameState.CONSTRUCTION)
         {
             player.startMoving();
+            
+            foreach(Patrol enemy in listOfEnemies)
+            {
+                enemy.startPatrol();
+            }
             updateState(GameState.RUNNING);
         }
         else if (state == GameState.RUNNING)
         {
             player.gameObject.SetActive(true);
-            player.stopMoving();
             player.reset();
             if (boat != null)
             {
                 boat.reset();
+            }
+            foreach (Patrol enemy in listOfEnemies)
+            {
+                enemy.stopMoving();
+                enemy.reset();
             }
             updateState(GameState.CONSTRUCTION);
         }

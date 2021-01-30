@@ -30,7 +30,7 @@ public class Player : Mob
         sailing = false;
     }
 
-    // Update is called once per frame
+    // keep it for later
     protected override void Update()
     {
         base.Update();
@@ -40,15 +40,21 @@ public class Player : Mob
         if (col.gameObject.tag == "Finish") {
             manager.PlayerTriggerFinish();
         }
-        if (col.gameObject.tag == "Death") {
-            manager.PlayerTriggerDeath();
-        }
         if (col.gameObject.tag == "Coin") {
             Coin coin = col.gameObject.GetComponent<Coin>();
             manager.addScore(coin.value);
             Destroy(coin.gameObject);
         }
 
+    }
+
+    protected override void OnCollisionEnter2D(Collision2D collision)
+    {
+        base.OnCollisionEnter2D(collision);
+        if (collision.gameObject.tag == "Death")
+        {
+            manager.PlayerTriggerDeath();
+        }
     }
 
     void OnTriggerExit2D(Collider2D col) {

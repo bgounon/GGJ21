@@ -34,6 +34,7 @@ public class Mob : MonoBehaviour
 
     public virtual void reset()
     {
+        stopMoving();
         transform.rotation = Quaternion.identity;
         transform.position = spawnPoint.transform.position;
     }
@@ -47,7 +48,7 @@ public class Mob : MonoBehaviour
 
     }
 
-    protected void OnCollisionEnter2D(Collision2D col) {
+    protected virtual void OnCollisionEnter2D(Collision2D col) {
         if (col.gameObject.tag == "Obstacle") {
             CollisionWithObstacle(col);
         }

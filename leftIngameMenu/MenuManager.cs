@@ -81,9 +81,9 @@ public class MenuManager : MonoBehaviour
 
     private void destroyCurrentItem()
     {
+        setItemSelection(false);
         DestroyImmediate(currentItem);
         currentItem = null;
-        setItemSelection(false);
     }
 
     private void followCursor()
@@ -157,18 +157,8 @@ public class MenuManager : MonoBehaviour
 
     private void setItemSelection(bool value)
     {
-        var playerRigidBody = player.GetComponent<Rigidbody2D>();
-        var playerCollider = player.GetComponent<Collider2D>();
-        if (value)
-        {
-            playerRigidBody.isKinematic = true;
-            playerCollider.enabled = false;
-        }
-        else
-        {
-            playerCollider.enabled = true;
-            playerRigidBody.isKinematic = false;
-        }
+        var collider = currentItem.GetComponent<Collider2D>();
+        collider.enabled = !value;
 
         isItemSelection = value;
     }

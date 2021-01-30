@@ -13,7 +13,6 @@ public class Patrol : Mob
     protected override void Start()
     {
         base.Start();
-        StartCoroutine(waiter());
         distancePatrolled = 0f;
     }
 
@@ -28,10 +27,20 @@ public class Patrol : Mob
         }
     }
 
+    public override void reset()
+    {
+        base.reset();
+        distancePatrolled = 0f;
+    }
+
+    public void startPatrol()
+    {
+        StartCoroutine(waiter());
+    }
+
     IEnumerator waiter()
     {
         yield return new WaitForSeconds(startDelay);
         startMoving();
-
     }
 }
