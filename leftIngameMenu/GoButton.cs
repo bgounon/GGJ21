@@ -1,30 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class GoButton : MonoBehaviour
 {
     private GameManager manager;
-    private TMPro.TextMeshProUGUI uiButton;
+    public Image imageGo;
+    public Image imageNoGo;
     private bool isPlaying = false;
+
+    private Image imageToChange;
     // Start is called before the first frame update
     void Start()
     {
+        var images = GetComponentsInChildren<Image>();
+        imageToChange = images.FirstOrDefault(item => item.name == "ImageButton");
         manager = FindObjectOfType<GameManager>();
-        uiButton = GetComponentInChildren<TMPro.TextMeshProUGUI>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isPlaying)
+        if (!isPlaying)
         {
-            uiButton.text = "STOP";
+            imageGo.gameObject.SetActive(true);
+            imageNoGo.gameObject.SetActive(false);
         }
         else
         {
-            uiButton.text = "GO";
+            imageGo.gameObject.SetActive(false);
+            imageNoGo.gameObject.SetActive(true);
         }
     }
 
