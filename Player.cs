@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public GameObject spawnPoint;
     public float speed = 2f;
     private bool moving;
     private Rigidbody2D rb2d;
@@ -14,19 +15,29 @@ public class Player : MonoBehaviour
     void Start()
     {
         rb2d = GetComponent<Rigidbody2D>();
-        velocity = transform.right * speed;
         moving = false;
+    }
+
+    public void startMoving()
+    {
+        moving = true;
+        velocity = transform.right * speed;
+    }
+
+    public void stopMoving()
+    {
+        moving = false;
+        rb2d.velocity = Vector2.zero;
+    }
+
+    public void resetPlayer()
+    {
+        transform.position = spawnPoint.transform.position;
     }
 
     // Update is called once per frame
     void Update()
     {
-
-        if (Input.GetKeyDown(KeyCode.Space) == true) {
-            moving = true;
-            print("Space key pressed.");
-        }
-    
         if (moving) {
             rb2d.velocity = velocity;
         }

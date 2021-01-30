@@ -165,6 +165,4 @@ public class MenuManager : MonoBehaviour
 
         isItemSelection = value;
     }
-    
-    
 }
