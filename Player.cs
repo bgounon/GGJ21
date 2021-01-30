@@ -63,5 +63,10 @@ public class Player : Mob
         }
 
     }
+    public void startMoving(Vector2 direction)
+    {
+        moving = true;
+        velocity = direction * speed;
+    }
 
 }

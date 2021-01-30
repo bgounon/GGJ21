@@ -8,6 +8,7 @@ public class GameManager : MonoBehaviour
     private MenuManager menuManager;
     private Player player;
     private Boat boat;
+    private GameObject playerDir;
     private GameState state;
     private ScreenFeedback screenFeedback;
     private int currentScore = 0;
@@ -16,6 +17,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         player = FindObjectOfType<Player>();
+        playerDir = FindObjectOfType<DirectionPointer>().gameObject;
         screenFeedback = FindObjectOfType<ScreenFeedback>();
         menuManager = FindObjectOfType<MenuManager>();
         boat = FindObjectOfType<Boat>();
@@ -33,7 +35,8 @@ public class GameManager : MonoBehaviour
         var listOfEnemies = FindObjectsOfType<Patrol>();
         if (state == GameState.CONSTRUCTION)
         {
-            player.startMoving();
+            player.startMoving(playerDir.transform.right);
+            playerDir.SetActive(false);
             
             foreach(Patrol enemy in listOfEnemies)
             {
@@ -44,6 +47,8 @@ public class GameManager : MonoBehaviour
         else if (state == GameState.RUNNING)
         {
             player.gameObject.SetActive(true);
+            playerDir.SetActive(true);
+
             player.reset();
             if (boat != null)
             {
