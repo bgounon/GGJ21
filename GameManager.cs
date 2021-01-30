@@ -5,6 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public int initialScore = 500;
+    private MenuManager menuManager;
     private Player player;
     private Boat boat;
     private GameState state;
@@ -16,6 +17,7 @@ public class GameManager : MonoBehaviour
     {
         player = FindObjectOfType<Player>();
         screenFeedback = FindObjectOfType<ScreenFeedback>();
+        menuManager = FindObjectOfType<MenuManager>();
         boat = FindObjectOfType<Boat>();
         updateState(GameState.CONSTRUCTION);
     }
@@ -87,6 +89,16 @@ public class GameManager : MonoBehaviour
 
     public void addScore(int value){
         currentScore += value;
+    }
+
+    public bool canStart()
+    {
+        return menuManager.isReadyToStart();
+    }
+
+    public bool isAllowedToSelectItem()
+    {
+        return state == GameState.CONSTRUCTION;
     }
 
 }

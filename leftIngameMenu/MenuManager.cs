@@ -9,9 +9,11 @@ public class MenuManager : MonoBehaviour
     private bool isItemSelection = false;
     private GameObject currentItem = null;
     private GameObject player;
+    private GameManager gameManager;
 
     void Start()
     {
+        gameManager = FindObjectOfType<GameManager>();
         player = GameObject.FindGameObjectsWithTag("Player").FirstOrDefault();
     }
 
@@ -117,6 +119,10 @@ public class MenuManager : MonoBehaviour
 
     private void onMouseClickWithoutSelection()
     {
+        if(!isAllowedToSelectItem())
+        {
+            return;
+        }
         Vector3 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         Vector2 mousePos2D = new Vector2(mousePos.x, mousePos.y);
             
@@ -165,5 +171,15 @@ public class MenuManager : MonoBehaviour
         }
 
         isItemSelection = value;
+    }
+    
+    public bool isReadyToStart()
+    {
+        return !isItemSelection;
+    }
+
+    private bool isAllowedToSelectItem()
+    {
+        return gameManager.isAllowedToSelectItem();
     }
 }

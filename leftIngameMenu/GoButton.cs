@@ -30,7 +30,13 @@ public class GoButton : MonoBehaviour
 
     public void onClick()
     {
-        isPlaying = !isPlaying;
-        manager.onEnterPressed();
+        if (manager.canStart())
+        {
+            isPlaying = !isPlaying;
+            manager.onEnterPressed();
+        } else
+        {
+            print("You have to put your item down or delete it");
+        }
     }
 }
