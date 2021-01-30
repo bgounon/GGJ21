@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        print("Init the game manager");
         player = FindObjectOfType<Player>();
         playerDir = FindObjectOfType<DirectionPointer>().gameObject;
         screenFeedback = FindObjectOfType<ScreenFeedback>();

@@ -29,10 +29,17 @@ public class LevelLoader : MonoBehaviour
         }
         catch (Exception e)
         {
+            print($"Exception : {e}");
             levelFinished = new LevelFinishedSerialization()
             {
-                levelFinishedList = new LevelFinishedDetails[] { }
+                levelFinishedList = Array.Empty<LevelFinishedDetails>()
             };
+        }
+
+        var levelBinders = FindObjectsOfType<LevelBinder>();
+        foreach (var levelBinder in levelBinders)
+        {
+            levelBinder.updateUiForFinishedLevels(levelFinished);
         }
         
         Debug.Log("LOADED");
@@ -112,10 +119,5 @@ public class LevelLoader : MonoBehaviour
         {
             print("Error impossible to serialize data");
         }
-    }
-
-    public LevelFinishedSerialization getCurrentLevelInfo()
-    {
-        return levelFinished;
     }
 }

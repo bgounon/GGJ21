@@ -12,7 +12,6 @@ public class LevelBinder : MonoBehaviour, IPointerClickHandler
     private void Start()
     {
         levelLoader = FindObjectOfType<LevelLoader>();
-        updateUiForFinishedLevels();
     }
 
     public void OnPointerClick(PointerEventData eventData)
@@ -20,9 +19,8 @@ public class LevelBinder : MonoBehaviour, IPointerClickHandler
         levelLoader.LoadLevel(sceneName);
     }
 
-    private void updateUiForFinishedLevels()
+    public void updateUiForFinishedLevels(LevelFinishedSerialization state)
     {
-        var state = levelLoader.getCurrentLevelInfo();
         var currentLevel = state.levelFinishedList.FirstOrDefault(item => item.levelName == sceneName);
         if (currentLevel.levelName != null)
         {
