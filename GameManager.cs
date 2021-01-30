@@ -23,6 +23,4 @@ public class GameManager : MonoBehaviour
         print("You are dead");
     }
 
-    public static void PlayerTriggerBoat(GameObject boat) {
-    }
 }
