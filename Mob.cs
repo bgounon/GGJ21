@@ -62,5 +62,9 @@ public class Mob : MonoBehaviour
         Vector2 newVelocity = Vector2.Reflect(velocity, inNormal);
         velocity = newVelocity;
     }
+    public Vector2 getDirection()
+    {
+        return velocity;
+    }
 
 }

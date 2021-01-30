@@ -117,7 +117,7 @@ public class LevelLoader : MonoBehaviour
         }
         catch (Exception e)
         {
-            print("Error impossible to serialize data");
+            print($"Error impossible to serialize data {e}");
         }
     }
 }

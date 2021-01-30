@@ -55,7 +55,10 @@ public class MenuManager : MonoBehaviour
         }
         else
         {
-            spawnAndFollowItem(prefabToSpawn);
+            if (isAllowedToSelectItem())
+            {
+                spawnAndFollowItem(prefabToSpawn);
+            }
         }
     }
 

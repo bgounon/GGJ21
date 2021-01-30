@@ -9,6 +9,7 @@ public class GameManager : MonoBehaviour
     private Player player;
     private Boat boat;
     private GameObject playerDir;
+    private EchoEffect trail;
     private GameState state;
     private ScreenFeedback screenFeedback;
     public int currentScore = 0;
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
         screenFeedback = FindObjectOfType<ScreenFeedback>();
         menuManager = FindObjectOfType<MenuManager>();
         boat = FindObjectOfType<Boat>();
+        trail = FindObjectOfType<EchoEffect>();
         updateState(GameState.CONSTRUCTION);
     }
 
@@ -38,6 +40,7 @@ public class GameManager : MonoBehaviour
         {
             player.startMoving(playerDir.transform.right);
             playerDir.SetActive(false);
+            trail.startTrail();
             
             foreach(Patrol enemy in listOfEnemies)
             {
@@ -51,6 +54,7 @@ public class GameManager : MonoBehaviour
             playerDir.SetActive(true);
 
             player.reset();
+            trail.clearTrail();
             if (boat != null)
             {
                 boat.reset();
@@ -74,11 +78,13 @@ public class GameManager : MonoBehaviour
             case GameState.WIN:
                 screenFeedback.updateDisplay("Win");
                 player.stopMoving();
+                trail.stopTrail();
                 break;
             case GameState.LOOSE:
                 currentScore = 0;
                 screenFeedback.updateDisplay("Loose");
                 player.stopMoving();
+                trail.stopTrail();
                 break;
             case GameState.CONSTRUCTION:
                 currentScore = initialScore;

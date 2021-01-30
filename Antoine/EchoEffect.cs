@@ -4,28 +4,54 @@ using UnityEngine;
 
 public class EchoEffect: MonoBehaviour
 {
-    public float timeBtwSpawns;
-    public float startTimeBtwSpawns;
+    public float timeBtwSpawns = 1f;
 
-    public GameObject echo;
+    public GameObject trail;
     private Player player;
+    private Vector2 direction;
+    private bool trailing;
+    private bool isWaiting = false;
+    private List<GameObject> traillist;
 
     private void Start()
     {
         player = GetComponent<Player>();
+        traillist = new List<GameObject>();
     }
 
     void Update()
     {
-        if(timeBtwSpawns <= 0)
+        if (trailing && !isWaiting)
         {
-            GameObject instance = (GameObject)Instantiate(echo, transform.position, Quaternion.identity);
-            Destroy(instance, 5f);
-            timeBtwSpawns = startTimeBtwSpawns;
+            direction = player.getDirection();
+            GameObject instance = (GameObject)Instantiate(trail, player.transform.position, Quaternion.identity);
+            instance.transform.right = direction;
+            traillist.Add(instance);
+            StartCoroutine(waiter());
         }
-        else
-        {
-            timeBtwSpawns -= Time.deltaTime;
-        }
+    }
+
+    public void startTrail()
+    {
+        trailing = true;
+    }
+    public void stopTrail()
+    {
+        trailing = false;
+
+    }
+
+    public void clearTrail()
+    {
+        stopTrail();
+        traillist.ForEach(item => Destroy(item));
+        traillist.Clear();
+    }
+
+    IEnumerator waiter()
+    {
+        isWaiting = true;
+        yield return new WaitForSeconds(timeBtwSpawns);
+        isWaiting = false;
     }
 }
