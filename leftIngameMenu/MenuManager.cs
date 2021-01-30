@@ -66,6 +66,8 @@ public class MenuManager : MonoBehaviour
     {
         if (isItemSelection)
         {
+            int currentItemScorePenalty = currentItem.GetComponent<Score>().scorePenalty;
+            gameManager.addScore(currentItemScorePenalty);
             destroyCurrentItem();
         }
     }

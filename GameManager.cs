@@ -13,6 +13,7 @@ public class GameManager : MonoBehaviour
     private GameState state;
     private ScreenFeedback screenFeedback;
     public int currentScore = 0;
+    public bool firstTry = true;
     
     // Start is called before the first frame update
     void Start()
@@ -50,6 +51,7 @@ public class GameManager : MonoBehaviour
         }
         else if (state == GameState.RUNNING)
         {
+            firstTry = false;
             player.gameObject.SetActive(true);
             playerDir.SetActive(true);
 
@@ -87,7 +89,7 @@ public class GameManager : MonoBehaviour
                 trail.stopTrail();
                 break;
             case GameState.CONSTRUCTION:
-                currentScore = initialScore;
+                if (firstTry) currentScore = initialScore;
                 screenFeedback.updateDisplay("Construction");
                 break;
         }
