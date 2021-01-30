@@ -3,41 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class Boat : MonoBehaviour
+public class Boat : Mob
 {
-    public GameObject spawnPoint;
-    public float speed = 2f;
-    private bool moving, sailing;
-    private Rigidbody2D rb2d;
-    private Vector2 velocity;
+    private bool sailing;
     private GameObject player;
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
-        rb2d = GetComponent<Rigidbody2D>();
-        velocity = transform.right * speed;
-        moving = false;
+        base.Start();
         sailing = false;
     }
 
-    public void resetBoat()
+    public override void reset()
     {
-        transform.position = spawnPoint.transform.position;
-        rb2d.velocity = Vector2.zero;
-        moving = false;
+        base.reset();
+        stopMoving();
         sailing = false;
         GetComponent<Collider2D>().enabled = true;
     }
 
     // Update is called once per frame
-    void Update()
+    protected override void Update()
     {
-    
-        if (moving)
-        {
-            rb2d.velocity = velocity;
-        }
+        base.Update();        
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -66,7 +55,6 @@ public class Boat : MonoBehaviour
     }
     void OnBecameInvisible()
     {
-        print("Boat became invisible");
         transform.position = new Vector3(-transform.position.x, -transform.position.y);
     }
 
