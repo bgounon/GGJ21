@@ -8,12 +8,12 @@ using UnityEngine.UI;
 
 public class ScreenFeedback : MonoBehaviour
 {
-        private Text textStatus;
-        private Text textScore;
+        private TMPro.TextMeshProUGUI textStatus;
+        private TMPro.TextMeshProUGUI textScore;
 
     private void Start()
     {
-        var components = GetComponentsInChildren<Text>();
+        var components = GetComponentsInChildren<TMPro.TextMeshProUGUI>();
         textStatus = components.FirstOrDefault(item => item.name == "Status");
         textScore = components.FirstOrDefault(item => item.name == "Score");
     }

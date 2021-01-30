@@ -8,7 +8,6 @@ public class GameManager : MonoBehaviour
     private Player player;
     private Boat boat;
     private GameState state;
-    private CreationPanelHider panelHider;
     private ScreenFeedback screenFeedback;
     private int currentScore = 0;
     
@@ -16,7 +15,6 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         player = FindObjectOfType<Player>();
-        panelHider = FindObjectOfType<CreationPanelHider>();
         screenFeedback = FindObjectOfType<ScreenFeedback>();
         boat = FindObjectOfType<Boat>();
         updateState(GameState.CONSTRUCTION);
@@ -25,14 +23,10 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            onEnterPressed();
-        }
         screenFeedback.updateScore(currentScore);
     }
 
-    private void onEnterPressed()
+    public void onEnterPressed()
     {
         if (state == GameState.CONSTRUCTION)
         {
@@ -44,7 +38,10 @@ public class GameManager : MonoBehaviour
             player.gameObject.SetActive(true);
             player.stopMoving();
             player.reset();
-            boat.resetBoat();
+            if (boat != null)
+            {
+                boat.resetBoat();
+            }
             updateState(GameState.CONSTRUCTION);
         }
     }
@@ -55,7 +52,6 @@ public class GameManager : MonoBehaviour
         {
             case GameState.RUNNING:
                 screenFeedback.updateDisplay("Running");
-                panelHider.hideCreationPannel();
                 break;
             case GameState.WIN:
                 screenFeedback.updateDisplay("Win");
@@ -69,7 +65,6 @@ public class GameManager : MonoBehaviour
             case GameState.CONSTRUCTION:
                 currentScore = initialScore;
                 screenFeedback.updateDisplay("Construction");
-                panelHider.showCreationPannel();
                 break;
         }
 
