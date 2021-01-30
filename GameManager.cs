@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    public int initialScore = 500;
+    public int initialScore = 1000;
     private MenuManager menuManager;
     private Player player;
     private Boat boat;
     private GameObject playerDir;
     private GameState state;
     private ScreenFeedback screenFeedback;
-    private int currentScore = 0;
+    public int currentScore = 0;
     
     // Start is called before the first frame update
     void Start()
@@ -104,6 +104,9 @@ public class GameManager : MonoBehaviour
 
     public void addScore(int value){
         currentScore += value;
+    }
+    public void removeScore(int value){
+        currentScore -= value;
     }
 
     public bool canStart()

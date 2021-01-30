@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.SocialPlatforms.Impl;
 
 public class MenuManager : MonoBehaviour
 {
@@ -95,6 +96,7 @@ public class MenuManager : MonoBehaviour
 
     private void onMouseClickWhileSelection()
     {
+        int currentItemScorePenalty = currentItem.GetComponent<Score>().scorePenalty;
         // If we want to optimize put it in coroutine
         // If you click on the world
         if (!IsPointerOverUIObject())
@@ -108,9 +110,13 @@ public class MenuManager : MonoBehaviour
             {
                 print("Other item under");
             }
+            else if (gameManager.currentScore < currentItemScorePenalty) {
+                print("Item is too expensive");
+            }
             else
             {
                 currentItem.tag = "Obstacle";
+                gameManager.removeScore(currentItemScorePenalty);
                 setItemSelection(false);
                 currentItem = null;
             }
