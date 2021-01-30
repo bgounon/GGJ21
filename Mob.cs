@@ -18,6 +18,7 @@ public class Mob : MonoBehaviour
         manager = FindObjectOfType<GameManager>();
         rb2d = GetComponent<Rigidbody2D>();
         moving = false;
+        reset();
     }
 
     public void startMoving()
