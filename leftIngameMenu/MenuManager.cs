@@ -123,6 +123,7 @@ public class MenuManager : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(mousePos2D, Vector2.zero);
         if (hit.collider != null && hit.transform.gameObject.CompareTag("Obstacle"))
         {
+            print("Hit obstacle");
             currentItem = hit.transform.gameObject;
             currentItem.tag = "Untagged";
             setItemSelection(true);

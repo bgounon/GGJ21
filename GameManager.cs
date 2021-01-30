@@ -6,6 +6,7 @@ public class GameManager : MonoBehaviour
 {
     public int initialScore = 500;
     private Player player;
+    private Boat boat;
     private GameState state;
     private CreationPanelHider panelHider;
     private ScreenFeedback screenFeedback;
@@ -17,6 +18,7 @@ public class GameManager : MonoBehaviour
         player = FindObjectOfType<Player>();
         panelHider = FindObjectOfType<CreationPanelHider>();
         screenFeedback = FindObjectOfType<ScreenFeedback>();
+        boat = FindObjectOfType<Boat>();
         updateState(GameState.CONSTRUCTION);
     }
 
@@ -38,8 +40,10 @@ public class GameManager : MonoBehaviour
         }
         else if (state == GameState.RUNNING)
         {
+            player.gameObject.SetActive(true);
             player.stopMoving();
             player.resetPlayer();
+            boat.resetBoat();
             updateState(GameState.CONSTRUCTION);
         }
     }

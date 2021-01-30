@@ -32,6 +32,7 @@ public class Player : MonoBehaviour
 
     public void resetPlayer()
     {
+        transform.rotation = Quaternion.identity;
         transform.position = spawnPoint.transform.position;
     }
 
