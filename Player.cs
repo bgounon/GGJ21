@@ -8,12 +8,14 @@ using UnityEngine;
 public class Player : Mob
 {
     private bool sailing;
+    private Animator anim;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         base.Start();
         sailing = false;
+        anim = GetComponent<Animator>();
     }
 
     public override void reset()
@@ -34,6 +36,7 @@ public class Player : Mob
     protected override void Update()
     {
         base.Update();
+        animate();
     }
 
     void OnTriggerEnter2D(Collider2D col) {
@@ -67,6 +70,27 @@ public class Player : Mob
     {
         moving = true;
         velocity = direction * speed;
+    }
+
+    private void animate() {
+        int newAnim;
+        int oldAnim = anim.GetInteger("Position");
+        if (!moving) {
+            newAnim = 0;
+        }
+        else {
+            if (velocity.x >= 0) {
+                if (velocity.y >= 0) newAnim = 4;
+                else newAnim = 1;
+            }
+            else {
+                if (velocity.y >= 0) newAnim = 3;
+                else newAnim = 2;
+            }
+        }
+        if (newAnim != oldAnim) {
+            anim.SetInteger("Position", newAnim);
+        }
     }
 
 }
