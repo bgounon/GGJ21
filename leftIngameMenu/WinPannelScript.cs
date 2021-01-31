@@ -13,13 +13,13 @@ public class WinPannelScript : MonoBehaviour
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
-        winText = GetComponentsInChildren<TMPro.TextMeshProUGUI>()
-            .FirstOrDefault(item => item.name == "WinText");
     }
 
     public void displayWinPannel(int score)
     {
         gameObject.SetActive(true);
+        winText = GetComponentsInChildren<TMPro.TextMeshProUGUI>()
+            .FirstOrDefault(item => item.name == "WinText");
         winText.text = $"You Win\nScore : {score}";
     }
 

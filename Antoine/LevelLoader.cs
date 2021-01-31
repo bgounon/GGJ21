@@ -100,10 +100,14 @@ public class LevelLoader : MonoBehaviour
         }
         else
         {
+            var tmpList = levelFinished.levelFinishedList.ToList();
+            tmpList.Remove(alreadyFinishedLevel);
             if (score > alreadyFinishedLevel.score)
             {
                 alreadyFinishedLevel.score = score;
             }
+            tmpList.Add(alreadyFinishedLevel);
+            levelFinished.levelFinishedList = tmpList.ToArray();
         }
 
         updateSerializedFile();

@@ -12,13 +12,13 @@ public class DiePannelScript : MonoBehaviour
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
-        dieText = GetComponentsInChildren<TMPro.TextMeshProUGUI>()
-            .FirstOrDefault(item => item.name == "DieText");
     }
 
     public void displayDiePannel(string dieCause)
     {
         gameObject.SetActive(true);
+        dieText = GetComponentsInChildren<TMPro.TextMeshProUGUI>()
+            .FirstOrDefault(item => item.name == "DieText");
         dieText.text = $"You loose : {dieCause}";
     }
 
