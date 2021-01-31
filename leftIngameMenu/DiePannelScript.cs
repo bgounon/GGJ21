@@ -16,7 +16,7 @@ public class DiePannelScript : MonoBehaviour
 
     public IEnumerator displayDiePannel(string dieCause)
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1.5f);
         gameObject.SetActive(true);
         dieText = GetComponentsInChildren<TMPro.TextMeshProUGUI>()
             .FirstOrDefault(item => item.name == "DieText");

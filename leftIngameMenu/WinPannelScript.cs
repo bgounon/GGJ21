@@ -17,7 +17,7 @@ public class WinPannelScript : MonoBehaviour
 
     public IEnumerator displayWinPannel(int score)
     {
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(1.5f);
         gameObject.SetActive(true);
         winText = GetComponentsInChildren<TMPro.TextMeshProUGUI>()
             .FirstOrDefault(item => item.name == "WinText");
