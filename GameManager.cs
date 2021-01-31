@@ -49,7 +49,7 @@ public class GameManager : MonoBehaviour
         {
             player.startMoving(playerDir.transform.right);
             playerDir.SetActive(false);
-            trail.startTrail();
+            trail.startTrail(player.getDirection());
             
             foreach(Patrol enemy in listOfEnemies)
             {

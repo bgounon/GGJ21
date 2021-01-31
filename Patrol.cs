@@ -29,7 +29,8 @@ public class Patrol : Mob
 
     public override void reset()
     {
-        base.reset();
+        stopMoving();
+        transform.position = spawnPoint.transform.position;
         distancePatrolled = 0f;
     }
 
