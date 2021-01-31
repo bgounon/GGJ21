@@ -22,6 +22,9 @@ public class LevelBinder : MonoBehaviour, IPointerClickHandler
     public void updateUiForFinishedLevels(LevelFinishedSerialization state)
     {
         var currentLevel = state.levelFinishedList.FirstOrDefault(item => item.levelName == sceneName);
+        var scoreText = GetComponentsInChildren<TMPro.TextMeshProUGUI>()
+            .FirstOrDefault(item => item.name == "score");
+        var text = "";
         if (currentLevel.levelName != null)
         {
             var validatedImage = GetComponentsInChildren<Image>().FirstOrDefault(item => item.name == "Validated");
@@ -29,6 +32,9 @@ public class LevelBinder : MonoBehaviour, IPointerClickHandler
             {
                 validatedImage.enabled = true;
             }
+
+            text = $"High score\n{currentLevel.score}";
         }
+        scoreText.text = text;
     }
 }
