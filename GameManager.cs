@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     private ScreenFeedback screenFeedback;
     public int currentScore = 0;
     public bool firstTry = true;
+    private DiePannelScript diePannel;
     
     // Start is called before the first frame update
     void Start()
@@ -25,6 +26,8 @@ public class GameManager : MonoBehaviour
         menuManager = FindObjectOfType<MenuManager>();
         boat = FindObjectOfType<Boat>();
         trail = FindObjectOfType<EchoEffect>();
+        diePannel = FindObjectOfType<DiePannelScript>();
+        diePannel.hideDisplayPannel();
         updateState(GameState.CONSTRUCTION);
     }
 
@@ -51,23 +54,30 @@ public class GameManager : MonoBehaviour
         }
         else if (state == GameState.RUNNING)
         {
-            firstTry = false;
-            player.gameObject.SetActive(true);
-            playerDir.SetActive(true);
-
-            player.reset();
-            trail.clearTrail();
-            if (boat != null)
-            {
-                boat.reset();
-            }
-            foreach (Patrol enemy in listOfEnemies)
-            {
-                enemy.stopMoving();
-                enemy.reset();
-            }
-            updateState(GameState.CONSTRUCTION);
+            retry();
         }
+    }
+
+    private void retry()
+    {
+        var listOfEnemies = FindObjectsOfType<Patrol>();
+        
+        firstTry = false;
+        player.gameObject.SetActive(true);
+        playerDir.SetActive(true);
+
+        player.reset();
+        trail.clearTrail();
+        if (boat != null)
+        {
+            boat.reset();
+        }
+        foreach (Patrol enemy in listOfEnemies)
+        {
+            enemy.stopMoving();
+            enemy.reset();
+        }
+        updateState(GameState.CONSTRUCTION);
     }
 
     private void updateState(GameState newState)
@@ -97,6 +107,17 @@ public class GameManager : MonoBehaviour
         state = newState;
     }
 
+    public void onRetryPressed()
+    {
+        // Do something
+        retry();
+    }
+
+    public GameState getState()
+    {
+        return state;
+    }
+
     public void PlayerTriggerFinish(){
         print("Finished");
         updateState(GameState.WIN);
@@ -104,11 +125,13 @@ public class GameManager : MonoBehaviour
     public void PlayerTriggerDeath(){
         print("You are dead");
         updateState(GameState.LOOSE);
+        diePannel.displayDiePannel("Dead");
     }
 
     public void PlayerTriggerDrown(){
         print("You drowned");
         updateState(GameState.LOOSE);
+        diePannel.displayDiePannel("Drown");
     }
 
     public void addScore(int value){
@@ -130,7 +153,7 @@ public class GameManager : MonoBehaviour
 
 }
 
-enum GameState
+public enum GameState
 {
     CONSTRUCTION,
     RUNNING,
