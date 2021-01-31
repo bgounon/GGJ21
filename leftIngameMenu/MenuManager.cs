@@ -11,10 +11,12 @@ public class MenuManager : MonoBehaviour
     private GameObject currentItem = null;
     private GameObject player;
     private GameManager gameManager;
+    private Sound sound;
 
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
+        sound = FindObjectOfType<Sound>();
         player = GameObject.FindGameObjectsWithTag("Player").FirstOrDefault();
     }
 
@@ -57,6 +59,7 @@ public class MenuManager : MonoBehaviour
         {
             if (isAllowedToSelectItem())
             {
+                sound.buttonSound();
                 spawnAndFollowItem(prefabToSpawn);
             }
         }
@@ -66,6 +69,7 @@ public class MenuManager : MonoBehaviour
     {
         if (isItemSelection)
         {
+            sound.buttonSound();
             int currentItemScorePenalty = currentItem.GetComponent<Score>().scorePenalty;
             gameManager.addScore(currentItemScorePenalty);
             destroyCurrentItem();
@@ -120,6 +124,7 @@ public class MenuManager : MonoBehaviour
             }
             else
             {
+                sound.buttonSound();
                 currentItem.tag = "Obstacle";
                 gameManager.removeScore(currentItemScorePenalty);
                 setItemSelection(false);

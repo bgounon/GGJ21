@@ -39,6 +39,7 @@ public class Boat : Mob
             player.SetActive(false);
             moving = true;
             print("The boat sails!");
+            sound.boatSound();
             StartCoroutine(waiter());
 
         }

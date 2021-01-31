@@ -5,11 +5,12 @@ using UnityEngine;
 public class Teleporter : MonoBehaviour
 {
     public GameObject destination;
+    private Sound sound;
 
     // Start is called before the first frame update
     void Start()
     {
-
+        sound = FindObjectOfType<Sound>();
     }
 
     // Update is called once per frame
@@ -22,6 +23,7 @@ public class Teleporter : MonoBehaviour
     {
         if (other.tag == "Player")
         {
+            sound.holeSound();
             other.transform.position = destination.transform.position;
             Collider2D destinationCollider = destination.GetComponent<Collider2D>();
             destinationCollider.enabled = false;

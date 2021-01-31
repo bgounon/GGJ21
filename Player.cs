@@ -46,6 +46,7 @@ public class Player : Mob
         if (col.gameObject.tag == "Coin") {
             Coin coin = col.gameObject.GetComponent<Coin>();
             manager.addScore(coin.value);
+            sound.coinSound();
             Destroy(coin.gameObject);
         }
 

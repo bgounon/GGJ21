@@ -14,6 +14,8 @@ public class GameManager : MonoBehaviour
     private ScreenFeedback screenFeedback;
     public int currentScore = 0;
     public bool firstTry = true;
+
+    private Sound sound;
     
     // Start is called before the first frame update
     void Start()
@@ -26,6 +28,7 @@ public class GameManager : MonoBehaviour
         boat = FindObjectOfType<Boat>();
         trail = FindObjectOfType<EchoEffect>();
         updateState(GameState.CONSTRUCTION);
+        sound = FindObjectOfType<Sound>();
     }
 
     // Update is called once per frame
@@ -36,6 +39,7 @@ public class GameManager : MonoBehaviour
 
     public void onEnterPressed()
     {
+        sound.buttonSound();
         var listOfEnemies = FindObjectsOfType<Patrol>();
         if (state == GameState.CONSTRUCTION)
         {
@@ -99,15 +103,18 @@ public class GameManager : MonoBehaviour
 
     public void PlayerTriggerFinish(){
         print("Finished");
+        sound.finishSound();
         updateState(GameState.WIN);
     }
     public void PlayerTriggerDeath(){
         print("You are dead");
+        sound.deathSound();
         updateState(GameState.LOOSE);
     }
 
     public void PlayerTriggerDrown(){
         print("You drowned");
+        sound.drownSound();
         updateState(GameState.LOOSE);
     }
 

@@ -11,6 +11,7 @@ public class Mob : MonoBehaviour
     protected Rigidbody2D rb2d;
     protected Vector2 velocity;
     protected GameManager manager;
+    protected Sound sound;
 
     // Start is called before the first frame update
     protected virtual void Start()
@@ -19,6 +20,7 @@ public class Mob : MonoBehaviour
         rb2d = GetComponent<Rigidbody2D>();
         moving = false;
         reset();
+        sound = FindObjectOfType<Sound>();
     }
 
     public void startMoving()
@@ -51,12 +53,14 @@ public class Mob : MonoBehaviour
 
     protected virtual void OnCollisionEnter2D(Collision2D col) {
         if (col.gameObject.tag == "Obstacle") {
+            
             CollisionWithObstacle(col);
         }
     }
 
     protected void CollisionWithObstacle(Collision2D col){
         print("Collide with obstacle.");
+        sound.obstacleHitSound();
 
         Vector2 inNormal = col.contacts[0].normal;
         Vector2 newVelocity = Vector2.Reflect(velocity, inNormal);
