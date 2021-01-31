@@ -14,8 +14,9 @@ public class DiePannelScript : MonoBehaviour
         gameManager = FindObjectOfType<GameManager>();
     }
 
-    public void displayDiePannel(string dieCause)
+    public IEnumerator displayDiePannel(string dieCause)
     {
+        yield return new WaitForSeconds(2);
         gameObject.SetActive(true);
         dieText = GetComponentsInChildren<TMPro.TextMeshProUGUI>()
             .FirstOrDefault(item => item.name == "DieText");

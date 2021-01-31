@@ -70,8 +70,11 @@ public class MenuManager : MonoBehaviour
         if (isItemSelection)
         {
             sound.buttonSound();
-            int currentItemScorePenalty = currentItem.GetComponent<Score>().scorePenalty;
-            gameManager.addScore(currentItemScorePenalty);
+            Score currentItemScoreScript = currentItem.GetComponent<Score>();
+            if (currentItemScoreScript.isOnTheGround)
+            {
+                gameManager.addScore(currentItemScoreScript.scorePenalty);
+            }
             destroyCurrentItem();
         }
     }
@@ -105,7 +108,7 @@ public class MenuManager : MonoBehaviour
 
     private void onMouseClickWhileSelection()
     {
-        int currentItemScorePenalty = currentItem.GetComponent<Score>().scorePenalty;
+        Score currentItemScoreScript = currentItem.GetComponent<Score>();
         // If we want to optimize put it in coroutine
         // If you click on the world
         if (!IsPointerOverUIObject())
@@ -119,14 +122,16 @@ public class MenuManager : MonoBehaviour
             {
                 print("Other item under");
             }
-            else if (gameManager.currentScore < currentItemScorePenalty) {
+            else if (gameManager.currentScore < currentItemScoreScript.scorePenalty) {
                 print("Item is too expensive");
             }
             else
             {
                 sound.buttonSound();
                 currentItem.tag = "Obstacle";
-                gameManager.removeScore(currentItemScorePenalty);
+                currentItemScoreScript.isOnTheGround = true;
+                gameManager.removeScore(currentItemScoreScript.scorePenalty);
+
                 setItemSelection(false);
                 currentItem = null;
             }

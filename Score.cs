@@ -5,6 +5,7 @@ using UnityEngine;
 public class Score : MonoBehaviour
 {
     public int scorePenalty = 100;
+    public bool isOnTheGround = false;
     // Start is called before the first frame update
     void Start()
     {

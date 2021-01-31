@@ -130,7 +130,7 @@ public class GameManager : MonoBehaviour
         print("Finished");
         sound.finishSound();
         updateState(GameState.WIN);
-        winPannel.displayWinPannel(currentScore);
+        StartCoroutine(winPannel.displayWinPannel(currentScore));
     }
 
     public void finishGame()
@@ -141,14 +141,14 @@ public class GameManager : MonoBehaviour
         print("You are dead");
         sound.deathSound();
         updateState(GameState.LOOSE);
-        diePannel.displayDiePannel("stuck");
+        StartCoroutine(diePannel.displayDiePannel("stuck"));
     }
 
     public void PlayerTriggerDrown(){
         print("You drowned");
         sound.drownSound();
         updateState(GameState.LOOSE);
-        diePannel.displayDiePannel("Drown");
+        StartCoroutine(diePannel.displayDiePannel("Drown"));
     }
 
     public void addScore(int value){
