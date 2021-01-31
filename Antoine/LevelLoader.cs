@@ -55,10 +55,15 @@ public class LevelLoader : MonoBehaviour
     {
         StartCoroutine(LoadScene("LevelSelection"));
     }
+
+    public void SaveAndBackToLevelSelection(int score)
+    {
+        updateLevelWin(SceneManager.GetActiveScene().name, score);
+        LoadSceneLevelSelectFonction();
+    }
     
     public void LoadLevel(string sceneName)
     {
-        updateLevelWin(sceneName, 100);
         StartCoroutine(LoadScene(sceneName));
     }
 

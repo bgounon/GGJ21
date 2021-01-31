@@ -16,6 +16,9 @@ public class GameManager : MonoBehaviour
     public bool firstTry = true;
 
     private Sound sound;
+    private DiePannelScript diePannel;
+    private WinPannelScript winPannel;
+    private LevelLoader levelLoader;
     
     // Start is called before the first frame update
     void Start()
@@ -27,6 +30,11 @@ public class GameManager : MonoBehaviour
         menuManager = FindObjectOfType<MenuManager>();
         boat = FindObjectOfType<Boat>();
         trail = FindObjectOfType<EchoEffect>();
+        diePannel = FindObjectOfType<DiePannelScript>();
+        diePannel.hideDisplayPannel();
+        winPannel = FindObjectOfType<WinPannelScript>();
+        winPannel.hideDisplayPannel();
+        levelLoader = FindObjectOfType<LevelLoader>();
         updateState(GameState.CONSTRUCTION);
         sound = FindObjectOfType<Sound>();
     }
@@ -45,7 +53,7 @@ public class GameManager : MonoBehaviour
         {
             player.startMoving(playerDir.transform.right);
             playerDir.SetActive(false);
-            trail.startTrail();
+            trail.startTrail(player.getDirection());
             
             foreach(Patrol enemy in listOfEnemies)
             {
@@ -55,23 +63,30 @@ public class GameManager : MonoBehaviour
         }
         else if (state == GameState.RUNNING)
         {
-            firstTry = false;
-            player.gameObject.SetActive(true);
-            playerDir.SetActive(true);
-
-            player.reset();
-            trail.clearTrail();
-            if (boat != null)
-            {
-                boat.reset();
-            }
-            foreach (Patrol enemy in listOfEnemies)
-            {
-                enemy.stopMoving();
-                enemy.reset();
-            }
-            updateState(GameState.CONSTRUCTION);
+            retry();
         }
+    }
+
+    private void retry()
+    {
+        var listOfEnemies = FindObjectsOfType<Patrol>();
+        
+        firstTry = false;
+        player.gameObject.SetActive(true);
+        playerDir.SetActive(true);
+
+        player.reset();
+        trail.clearTrail();
+        if (boat != null)
+        {
+            boat.reset();
+        }
+        foreach (Patrol enemy in listOfEnemies)
+        {
+            enemy.stopMoving();
+            enemy.reset();
+        }
+        updateState(GameState.CONSTRUCTION);
     }
 
     private void updateState(GameState newState)
@@ -87,7 +102,6 @@ public class GameManager : MonoBehaviour
                 trail.stopTrail();
                 break;
             case GameState.LOOSE:
-                currentScore = 0;
                 screenFeedback.updateDisplay("Loose");
                 player.stopMoving();
                 trail.stopTrail();
@@ -101,21 +115,40 @@ public class GameManager : MonoBehaviour
         state = newState;
     }
 
+    public void onRetryPressed()
+    {
+        // Do something
+        retry();
+    }
+
+    public GameState getState()
+    {
+        return state;
+    }
+
     public void PlayerTriggerFinish(){
         print("Finished");
         sound.finishSound();
         updateState(GameState.WIN);
+        winPannel.displayWinPannel(currentScore);
+    }
+
+    public void finishGame()
+    {
+        levelLoader.SaveAndBackToLevelSelection(currentScore);
     }
     public void PlayerTriggerDeath(){
         print("You are dead");
         sound.deathSound();
         updateState(GameState.LOOSE);
+        diePannel.displayDiePannel("stuck");
     }
 
     public void PlayerTriggerDrown(){
         print("You drowned");
         sound.drownSound();
         updateState(GameState.LOOSE);
+        diePannel.displayDiePannel("Drown");
     }
 
     public void addScore(int value){
@@ -137,7 +170,7 @@ public class GameManager : MonoBehaviour
 
 }
 
-enum GameState
+public enum GameState
 {
     CONSTRUCTION,
     RUNNING,

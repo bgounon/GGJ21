@@ -7,15 +7,15 @@ public class EchoEffect: MonoBehaviour
     public float timeBtwSpawns = 1f;
 
     public GameObject trail;
-    private Player player;
-    private Vector2 direction;
+    public GameObject player;
+    public GameObject boat;
+    private Vector2? direction;
     private bool trailing;
     private bool isWaiting = false;
     private List<GameObject> traillist;
 
     private void Start()
     {
-        player = GetComponent<Player>();
         traillist = new List<GameObject>();
     }
 
@@ -23,21 +23,43 @@ public class EchoEffect: MonoBehaviour
     {
         if (trailing && !isWaiting)
         {
-            direction = player.getDirection();
-            GameObject instance = (GameObject)Instantiate(trail, player.transform.position, Quaternion.identity);
-            instance.transform.right = direction;
+
+            GameObject instance;
+            if (player.active)
+            {
+                assignDirection(player.GetComponent<Rigidbody2D>().velocity);
+                instance = (GameObject)Instantiate(trail, player.transform.position, Quaternion.identity);
+            } else
+            {
+                assignDirection(boat.GetComponent<Rigidbody2D>().velocity);
+                instance = (GameObject)Instantiate(trail, boat.transform.position, Quaternion.identity);
+            }
+            
+            
+            instance.transform.right = direction.Value;
+            direction = null;
             traillist.Add(instance);
             StartCoroutine(waiter());
         }
     }
 
-    public void startTrail()
+    private void assignDirection(Vector2 direction)
+    {
+        if(this.direction == null)
+        {
+            this.direction = direction;
+        }
+    }
+
+    public void startTrail(Vector2 direction)
     {
         trailing = true;
+        this.direction = direction;
     }
     public void stopTrail()
     {
         trailing = false;
+        this.direction = null;
 
     }
 

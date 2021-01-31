@@ -35,7 +35,7 @@ public class Boat : Mob
         {
             player = other.gameObject;
             player.GetComponent<Player>().sail();
-            velocity = other.GetComponent<Rigidbody2D>().velocity;
+            velocity = other.GetComponent<Rigidbody2D>().velocity * speed;
             player.SetActive(false);
             moving = true;
             print("The boat sails!");

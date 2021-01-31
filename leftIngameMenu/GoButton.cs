@@ -23,7 +23,7 @@ public class GoButton : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!isPlaying)
+        if (manager.getState() == GameState.CONSTRUCTION)
         {
             imageGo.gameObject.SetActive(true);
             imageNoGo.gameObject.SetActive(false);
@@ -33,6 +33,11 @@ public class GoButton : MonoBehaviour
             imageGo.gameObject.SetActive(false);
             imageNoGo.gameObject.SetActive(true);
         }
+    }
+
+    public void reset()
+    {
+        isPlaying = false;
     }
 
     public void onClick()
