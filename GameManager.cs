@@ -30,10 +30,10 @@ public class GameManager : MonoBehaviour
         menuManager = FindObjectOfType<MenuManager>();
         boat = FindObjectOfType<Boat>();
         trail = FindObjectOfType<EchoEffect>();
-        diePannel = FindObjectOfType<DiePannelScript>();
-        diePannel.hideDisplayPannel();
-        winPannel = FindObjectOfType<WinPannelScript>();
-        winPannel.hideDisplayPannel();
+//        diePannel = FindObjectOfType<DiePannelScript>();
+//        diePannel.hideDisplayPannel();
+//        winPannel = FindObjectOfType<WinPannelScript>();
+//        winPannel.hideDisplayPannel();
         levelLoader = FindObjectOfType<LevelLoader>();
         updateState(GameState.CONSTRUCTION);
         sound = FindObjectOfType<Sound>();
