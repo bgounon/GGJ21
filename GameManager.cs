@@ -15,6 +15,8 @@ public class GameManager : MonoBehaviour
     public int currentScore = 0;
     public bool firstTry = true;
     private DiePannelScript diePannel;
+    private WinPannelScript winPannel;
+    private LevelLoader levelLoader;
     
     // Start is called before the first frame update
     void Start()
@@ -28,6 +30,9 @@ public class GameManager : MonoBehaviour
         trail = FindObjectOfType<EchoEffect>();
         diePannel = FindObjectOfType<DiePannelScript>();
         diePannel.hideDisplayPannel();
+        winPannel = FindObjectOfType<WinPannelScript>();
+        winPannel.hideDisplayPannel();
+        levelLoader = FindObjectOfType<LevelLoader>();
         updateState(GameState.CONSTRUCTION);
     }
 
@@ -93,7 +98,6 @@ public class GameManager : MonoBehaviour
                 trail.stopTrail();
                 break;
             case GameState.LOOSE:
-                currentScore = 0;
                 screenFeedback.updateDisplay("Loose");
                 player.stopMoving();
                 trail.stopTrail();
@@ -121,15 +125,21 @@ public class GameManager : MonoBehaviour
     public void PlayerTriggerFinish(){
         print("Finished");
         updateState(GameState.WIN);
+        winPannel.displayWinPannel(currentScore);
+    }
+
+    public void finishGame()
+    {
+        levelLoader.SaveAndBackToLevelSelection(currentScore);
     }
     public void PlayerTriggerDeath(){
         print("You are dead");
         updateState(GameState.LOOSE);
-        diePannel.displayDiePannel("Dead");
+        diePannel.displayDiePannel("stuck");
     }
 
     public void PlayerTriggerDrown(){
-        print("You drowned");
+        print("drowned");
         updateState(GameState.LOOSE);
         diePannel.displayDiePannel("Drown");
     }

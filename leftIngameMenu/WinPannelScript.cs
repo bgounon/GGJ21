@@ -3,23 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class DiePannelScript : MonoBehaviour
+public class WinPannelScript : MonoBehaviour
 {
+    
     private GameManager gameManager;
 
-    private TMPro.TextMeshProUGUI dieText;
+    private TMPro.TextMeshProUGUI winText;
     // Start is called before the first frame update
     void Start()
     {
         gameManager = FindObjectOfType<GameManager>();
-        dieText = GetComponentsInChildren<TMPro.TextMeshProUGUI>()
-            .FirstOrDefault(item => item.name == "DieText");
+        winText = GetComponentsInChildren<TMPro.TextMeshProUGUI>()
+            .FirstOrDefault(item => item.name == "WinText");
     }
 
-    public void displayDiePannel(string dieCause)
+    public void displayWinPannel(int score)
     {
         gameObject.SetActive(true);
-        dieText.text = $"You loose : {dieCause}";
+        winText.text = $"You Win\nScore : {score}";
     }
 
     public void hideDisplayPannel()
@@ -27,9 +28,9 @@ public class DiePannelScript : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void onRetryPressed()
+    public void onMenuPress()
     {
-        gameManager.onRetryPressed();
-        hideDisplayPannel();
+        //load level selection
+        gameManager.finishGame();
     }
 }
